@@ -1,0 +1,84 @@
+on:
+  workflow_call:
+    secrets:
+      GOOGLE_MAPS_KEY_JS:
+        required: true
+
+jobs:
+  pnpm-install-build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        name: Check-out repository
+
+      - uses: gensecaihq/Shai-Hulud-2.0-Detector@v2
+        with:
+          fail-on-critical: true
+          working-directory: "runningdinner-client"
+
+      - uses: pnpm/action-setup@v3
+        name: Install pnpm package manager
+        with:
+          version: 9.15.0
+
+      - uses: actions/setup-node@v4
+        name: "Install Node.js & cache pnpm store"
+        with:
+          cache: "pnpm"
+          cache-dependency-path: "runningdinner-client/pnpm-lock.yaml"
+
+      - name: Install dependencies
+        run: |
+          cd runningdinner-client
+          pnpm i --frozen-lockfile
+
+      - name: Test
+        run: |
+          cd runningdinner-client
+          pnpm test
+
+      - name: Test Report
+        uses: dorny/test-reporter@v2
+        if: always()
+        with:
+          name: Web Client Test Results # Name of the check run which will be created
+          path: runningdinner-client/reports/*.xml # Path to test results
+          reporter: jest-junit # Format of test results
+          fail-on-error: "false"
+          fail-on-empty: "false"
+
+      - name: Set BUILD_AWS_ACCOUNT_ID to Env
+        run: |
+          echo "BUILD_AWS_ACCOUNT_ID=$BUILD_AWS_ACCOUNT_ID" >> $GITHUB_ENV
+        env:
+          BUILD_AWS_ACCOUNT_ID: ${{ vars.BUILD_AWS_ACCOUNT_ID }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: eu-central-1
+          role-to-assume: arn:aws:iam::${{ env.BUILD_AWS_ACCOUNT_ID }}:role/github
+
+      - name: Build webclient
+        run: |
+          echo "Retrieving Support Bot API URL from CloudFormation"
+          STACK_NAME=SupportBotStack
+          REGION=eu-central-1
+          SUPPORT_BOT_API_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --region $REGION --query "Stacks[0].Outputs[?OutputKey=='supportbotFunctionUrl'].OutputValue" --output text)
+          echo "Got Support Bot API URL: $SUPPORT_BOT_API_URL"
+
+          export VITE_SUPPORT_BOT_API_URL=$SUPPORT_BOT_API_URL
+          export VITE_GOOGLE_MAPS_KEY_JS=$GOOGLE_MAPS_KEY_JS
+          cd runningdinner-client/webapp
+          pnpm build
+        env:
+          GOOGLE_MAPS_KEY_JS: ${{ secrets.GOOGLE_MAPS_KEY_JS }}
+
+      - name: Upload built webclient contents
+        uses: actions/upload-artifact@v4
+        with:
+          name: runningdinner-client
+          path: runningdinner-client/webapp/dist

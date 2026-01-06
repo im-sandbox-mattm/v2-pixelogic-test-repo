@@ -1,0 +1,86 @@
+import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
+import { Suspense } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import { WIZARD_ROOT_PATH } from './common/mainnavigation/NavigationPaths';
+import { ProgressBar } from './common/ProgressBar';
+import { runningDinnerTheme } from './common/theme/RunningDinnerTheme';
+import { ErrorBoundary } from './ErrorBoundary';
+
+declare module '@mui/material/styles' {
+  // eslint-disable-next-line
+  interface Theme {
+    // Your custom theme extensions if any
+  }
+}
+
+const SelfAdminApp = React.lazy(() => import('./self/SelfAdminApp'));
+const WizardApp = React.lazy(() => import('./wizard/WizardApp'));
+const LandingApp = React.lazy(() => import('./landing/LandingApp'));
+const AdminApp = React.lazy(() => import('./admin/AdminApp'));
+
+function App() {
+  if (isBackendCall()) {
+    return null;
+  }
+
+  return (
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={runningDinnerTheme}>
+        <ErrorBoundary>
+          <Router>
+            <Routes>
+              <Route
+                path="/*"
+                element={
+                  <Suspense fallback={<ProgressBar showLoadingProgress={true} />}>
+                    <LandingApp />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/admin/:adminId/*"
+                element={
+                  <Suspense fallback={<ProgressBar showLoadingProgress={true} />}>
+                    <AdminApp />
+                  </Suspense>
+                }
+              />
+              <Route
+                path={`${WIZARD_ROOT_PATH}/*`}
+                element={
+                  <Suspense fallback={<ProgressBar showLoadingProgress={true} />}>
+                    <WizardApp />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/self/*"
+                element={
+                  <Suspense fallback={<ProgressBar showLoadingProgress={true} />}>
+                    <SelfAdminApp />
+                  </Suspense>
+                }
+              />
+            </Routes>
+          </Router>
+        </ErrorBoundary>
+      </ThemeProvider>
+    </StyledEngineProvider>
+  );
+}
+
+// This is not very elegant, but works for now quite simple this way...
+const BACKEND_URL_PARTS = ['/rest/', '/resources/', '/sse/'];
+function isBackendCall() {
+  const pathName = window.location.pathname;
+  for (let i = 0; i < BACKEND_URL_PARTS.length; i++) {
+    if (pathName.toLowerCase().indexOf(BACKEND_URL_PARTS[i]) >= 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export default App;

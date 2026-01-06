@@ -1,0 +1,67 @@
+on:
+  workflow_call:
+    inputs:
+      stageSubdomain:
+        required: true
+        type: string
+
+jobs:
+  mvn-package-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: runningdinner
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+          cache: "maven"
+
+      - name: Setup application-prod.properties # Not very nice, but sufficient for now
+        run: |
+          #SUBDOMAIN=""
+          #if [ "dev" == "${{inputs.stageSubdomain}}" ]; then
+          #  SUBDOMAIN="dev."
+          #fi
+          # echo "Using subdomain $SUBDOMAIN"
+          # echo "host.context.url=https://${SUBDOMAIN}runyourdinner.eu" >> runningdinner-backend/src/main/resources/application-prod.properties
+          echo "server.port=80" >> runningdinner-backend/src/main/resources/application-prod.properties
+
+      - name: Build and Test
+        run: |
+          cd runningdinner-backend
+          mvn package
+          java -Djarmode=layertools -jar target/*.jar extract --destination target/extracted/
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          check_name: Backend Test Results
+          junit_files: "runningdinner-backend/target/surefire-reports/*.xml"
+          fail-on-error: "false"
+          fail-on-empty: "false"
+
+      - name: Upload built backend contents
+        uses: actions/upload-artifact@v4
+        with:
+          name: runningdinner-backend
+          path: runningdinner-backend/target/extracted/

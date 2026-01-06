@@ -1,0 +1,14 @@
+node_modules
+dist
+*.tsbuildinfo
+*.iml
+.idea
+packages/**/dist/
+packages/**/build
+
+.vscode/
+/webapp/public/apple-touch-icon.png.old
+/webapp/public/favicon.ico.old
+/webapp/public/favicon.png.old
+start-dev-win.ps1
+reports/
