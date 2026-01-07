@@ -66,6 +66,12 @@ public class DistanceCalculatorTest {
   }
 
   @Test
+  public void calculateDistanceDistinctCoordinatesIsPositive() {
+    double d = DistanceCalculator.calculateDistanceVincentyInMeters(johannVonWeerth9, loerracherStr20);
+    assertThat(d).isPositive();
+  }
+
+  @Test
   public void distanceEntryEquality() {
 
     String srcId = "src";
