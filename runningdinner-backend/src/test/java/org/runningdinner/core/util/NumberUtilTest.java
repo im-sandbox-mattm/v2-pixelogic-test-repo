@@ -1,6 +1,7 @@
 package org.runningdinner.core.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
 import java.util.Locale;
@@ -33,5 +34,10 @@ public class NumberUtilTest {
   @Test
   public void englishAmountIsCorrectlyFormatted() {
     assertThat(NumberUtil.getFormattedAmountValue(new BigDecimal("8.55"), Locale.US)).isEqualTo("8.55");
+  }
+
+  @Test
+  public void nullCannotBeParsedAsInteger() {
+    assertThatThrownBy(() -> NumberUtil.parseIntSafe(null)).isInstanceOf(org.runningdinner.common.exception.TechnicalException.class);
   }
 }
