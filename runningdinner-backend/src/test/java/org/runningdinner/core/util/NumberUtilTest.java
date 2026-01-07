@@ -40,4 +40,9 @@ public class NumberUtilTest {
   public void nullCannotBeParsedAsInteger() {
     assertThatThrownBy(() -> NumberUtil.parseIntSafe(null)).isInstanceOf(org.runningdinner.common.exception.TechnicalException.class);
   }
+ 
+  @Test
+  public void parseIntSafeTrimsWhitespace() {
+    assertThat(NumberUtil.parseIntSafe(" 42 ")).isEqualTo(42);
+  }
 }

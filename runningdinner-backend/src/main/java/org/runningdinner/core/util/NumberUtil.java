@@ -23,7 +23,7 @@ public final class NumberUtil {
   
   public static int parseIntSafe(String src) {
     try {
-      return Integer.parseInt(src);
+      return Integer.parseInt(src != null ? src.trim() : null);
     } catch (NumberFormatException e) {
       throw new TechnicalException("could not parse " + LogSanitizer.sanitize(src) + " as integer", e);
     }
