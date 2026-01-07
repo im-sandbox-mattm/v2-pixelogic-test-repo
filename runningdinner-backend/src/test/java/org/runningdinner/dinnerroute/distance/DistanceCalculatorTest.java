@@ -52,6 +52,14 @@ public class DistanceCalculatorTest {
   }
 
   @Test
+  public void calculateDistanceSameCoordinatesDifferentObjects() {
+    Participant a = newHost("10", 48.0088781, 7.813856299999999);
+    Participant b = newHost("11", 48.0088781, 7.813856299999999);
+    double d = DistanceCalculator.calculateDistanceVincentyInMeters(a, b);
+    assertThat(d).isZero();
+  }
+
+  @Test
   public void calculateDistanceNeighbourCoordinates() {
     double d = DistanceCalculator.calculateDistanceVincentyInMeters(eisenbahnStr49, eisenbahnStr45);
     assertThat(d).isCloseTo(37.22, within(0.01));
