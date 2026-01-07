@@ -32,8 +32,12 @@ describe('participant registration', () => {
     }).then(createRunningDinnerResponse => {
       runningDinner = createRunningDinnerResponse.runningDinner;
       adminId = runningDinner.adminId;
+
+      const { publicDinnerId } = runningDinner.publicSettings || {};
+      expect(publicDinnerId, "publicDinnerId").to.be.a("string").and.not.be.empty;
+
       // TODO: This is really stupid, backend gives us no publicDinnerUrl upon wizard finish....:
-      publicDinnerUrl = `/running-dinner-events/${runningDinner.publicSettings.publicDinnerId}`;
+      publicDinnerUrl = `/running-dinner-events/${publicDinnerId}`;
 
       cy.log(`Open public dinner ${publicDinnerUrl}`);
       cy.visit(publicDinnerUrl);
