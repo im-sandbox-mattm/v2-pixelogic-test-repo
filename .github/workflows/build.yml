@@ -2,6 +2,7 @@ name: Build Backend + Webclient
 
 on:
   push:
+  pull_request:
   workflow_dispatch:
 
 env:
