@@ -81,11 +81,11 @@ export default function MealTimesStep() {
   }, [dispatch]);
 
   const submitTimesAsync = async (afterPartyLocationValues: AfterPartyLocation) => {
-    const mealtimesValidationCall = validateMealTimes();
-    const afterPartyLocationValidationCall = validateAfterPartyLocation(afterPartyLocationValues);
-    const mealtimesValidationResponse = await mealtimesValidationCall;
-    const afterPartyLocationValidationResponse = await afterPartyLocationValidationCall;
-    return mealtimesValidationResponse && afterPartyLocationValidationResponse;
+    const mealtimesValidationResponse = await validateMealTimes();
+    if (!mealtimesValidationResponse) {
+      return false;
+    }
+    return await validateAfterPartyLocation(afterPartyLocationValues);
   };
 
   async function validateMealTimes() {
