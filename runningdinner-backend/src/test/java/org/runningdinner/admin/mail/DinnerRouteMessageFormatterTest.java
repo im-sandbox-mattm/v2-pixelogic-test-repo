@@ -151,6 +151,18 @@ public class DinnerRouteMessageFormatterTest {
 		assertThat(dinnerRouteMessage).contains("Kontakt: 123456789");
 		assertThat(dinnerRouteMessage).contains("Kontakt: N/A"); // The other team in dinner-route have no mobile numbers setup, hence we get this one always also
 	}
+
+	@Test
+	public void emptyHostsTemplateThrowsIllegalStateException() {
+		
+		RunningDinner runningDinner = newMockedRunningDinner();
+		DinnerRouteMessage dinnerRouteMessageTemplate = newDinnerRouteMessage();
+		dinnerRouteMessageTemplate.setHostsTemplate("");
+		
+		IllegalStateException ex = org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class,
+				() -> formatter.formatDinnerRouteMessage(runningDinner, null, null, Collections.emptyList(), dinnerRouteMessageTemplate));
+		assertThat(ex.getMessage()).contains("Hosts part template must not be empty!");
+	}
 	
 	private void setMobileNumber(Team team, String mobileNumber, boolean setToHostingTeamMember) {
 		
