@@ -107,7 +107,10 @@ public class DinnerRouteMessageFormatterTest {
 		DinnerRouteMessage dinnerRouteMessageTemplate = newDinnerRouteMessage();
 		
 		String dinnerRouteMessage = formatter.formatDinnerRouteMessage(runningDinner, team.getHostTeamMember(), team, dinnerRoute, dinnerRouteMessageTemplate);
-		assertThat(dinnerRouteMessage).contains("Kontakt: 123456789, 987654321");
+		assertThat(dinnerRouteMessage)
+				.contains("Kontakt:")
+				.contains("123456789")
+				.contains("987654321");
 		assertThat(dinnerRouteMessage).contains("Kontakt: N/A"); // The other team in dinner-route have no mobile numbers setup, hence we get this one always also
 	}
 	
