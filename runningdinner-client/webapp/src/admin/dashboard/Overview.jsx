@@ -98,6 +98,9 @@ export default function Overview({ runningDinner }) {
       return;
     }
 
+    // Fallback for legacy browser support only.
+    // Note: document.execCommand('copy') is deprecated, but kept here for older browsers
+    // that don't support the modern Clipboard API (navigator.clipboard).
     const textarea = document.createElement('textarea');
     textarea.value = text;
     textarea.style.position = 'fixed';
