@@ -13,8 +13,8 @@ jobs:
       postgres:
         image: postgres:17-alpine
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: root
+          POSTGRES_USER: runningdinner
+          POSTGRES_PASSWORD: runningdinner
           POSTGRES_DB: runningdinner
         ports:
           - 5432:5432
