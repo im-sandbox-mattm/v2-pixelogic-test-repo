@@ -51,12 +51,14 @@ jobs:
           fail-on-empty: "false"
 
       - name: Set BUILD_AWS_ACCOUNT_ID to Env
+        if: ${{ vars.BUILD_AWS_ACCOUNT_ID != '' }}
         run: |
           echo "BUILD_AWS_ACCOUNT_ID=$BUILD_AWS_ACCOUNT_ID" >> $GITHUB_ENV
         env:
           BUILD_AWS_ACCOUNT_ID: ${{ vars.BUILD_AWS_ACCOUNT_ID }}
 
       - name: Configure AWS credentials
+        if: ${{ vars.BUILD_AWS_ACCOUNT_ID != '' }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: eu-central-1
@@ -64,17 +66,24 @@ jobs:
 
       - name: Build webclient
         run: |
-          echo "Retrieving Support Bot API URL from CloudFormation"
-          STACK_NAME=SupportBotStack
-          REGION=eu-central-1
-          SUPPORT_BOT_API_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --region $REGION --query "Stacks[0].Outputs[?OutputKey=='supportbotFunctionUrl'].OutputValue" --output text)
-          echo "Got Support Bot API URL: $SUPPORT_BOT_API_URL"
+          SUPPORT_BOT_API_URL=""
+
+          if [ -n "$BUILD_AWS_ACCOUNT_ID" ]; then
+            echo "Retrieving Support Bot API URL from CloudFormation"
+            STACK_NAME=SupportBotStack
+            REGION=eu-central-1
+            SUPPORT_BOT_API_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --region $REGION --query "Stacks[0].Outputs[?OutputKey=='supportbotFunctionUrl'].OutputValue" --output text)
+            echo "Got Support Bot API URL: $SUPPORT_BOT_API_URL"
+          else
+            echo "BUILD_AWS_ACCOUNT_ID is not set; skipping CloudFormation lookup for support bot URL"
+          fi
 
           export VITE_SUPPORT_BOT_API_URL=$SUPPORT_BOT_API_URL
           export VITE_GOOGLE_MAPS_KEY_JS=$GOOGLE_MAPS_KEY_JS
           cd runningdinner-client/webapp
           pnpm build
         env:
+          BUILD_AWS_ACCOUNT_ID: ${{ vars.BUILD_AWS_ACCOUNT_ID }}
           GOOGLE_MAPS_KEY_JS: ${{ secrets.GOOGLE_MAPS_KEY_JS }}
 
       - name: Upload built webclient contents
