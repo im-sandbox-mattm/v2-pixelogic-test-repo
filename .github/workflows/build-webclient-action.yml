@@ -2,7 +2,7 @@ on:
   workflow_call:
     secrets:
       GOOGLE_MAPS_KEY_JS:
-        required: true
+        required: false
 
 jobs:
   pnpm-install-build:
