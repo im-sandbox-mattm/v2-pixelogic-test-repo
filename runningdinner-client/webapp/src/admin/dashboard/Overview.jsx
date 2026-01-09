@@ -120,10 +120,10 @@ export default function Overview({ runningDinner }) {
     }
   }
 
-  let publicOerviewItems;
+  let publicOverviewItems;
   if (!isClosedDinner(runningDinner)) {
     const publicSettings = runningDinner.publicSettings;
-    publicOerviewItems = [
+    publicOverviewItems = [
       <OverviewItem key={0} headline={t('public_dinner_link')} content={<PublicRunningDinnerLink {...runningDinner} />} />,
       <OverviewItem key={1} headline={t('public_end_of_registration_date')} content={<LocalDate date={publicSettings.endOfRegistrationDate}></LocalDate>} />,
       <OverviewItem key={2} headline={t('public_title')} content={publicSettings.title} />,
@@ -137,7 +137,7 @@ export default function Overview({ runningDinner }) {
         <Subtitle i18n="overview" />
         <div>
           <OverviewItem headline={t('registration_type')} content={visibilityLabel} />
-          {publicOerviewItems}
+          {publicOverviewItems}
           <OverviewItem
             headline={t('admin:email_templates_headline')}
             content={
