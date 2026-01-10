@@ -114,7 +114,7 @@ public class RunningDinnerServiceTest {
     RunningDinner result = runningDinnerService.findRunningDinnerByAdminId(dinnerAdminId);
     assertThat(result.getTitle()).isEqualTo(DINNER_TITLE);
     assertThat(result.getEmail()).isEqualTo(DINNER_EMAIL);
-    assertThat(result.getConfiguration().getTeamSize()).isEqualTo(999);
+    assertThat(result.getConfiguration().getTeamSize()).isEqualTo(2);
     assertThat(result.getConfiguration().getGenderAspects()).isSameAs(GenderAspect.IGNORE_GENDER);
     assertThat(result.getConfiguration().isForceEqualDistributedCapacityTeams()).isTrue();
     assertThat(result.getConfiguration().getMealClasses()).hasSize(3);
