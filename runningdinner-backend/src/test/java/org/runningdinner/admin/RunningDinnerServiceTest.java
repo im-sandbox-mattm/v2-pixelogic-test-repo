@@ -1,4 +1,3 @@
-
 package org.runningdinner.admin;
 
 import jakarta.persistence.EntityManagerFactory;
@@ -86,7 +85,7 @@ public class RunningDinnerServiceTest {
 
     RunningDinner runningDinner = createDefaultRunningDinner();
 
-    assertThat(runningDinner).isNotNull();
+    assertThat(runningDinner).isNull();
     assertThat(runningDinner.getAdminId()).isNotEmpty();
     assertThat(runningDinner.getEmail()).isEqualTo(DINNER_EMAIL);
 
