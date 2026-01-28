@@ -1,31 +1,72 @@
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import { Avatar, CardHeader } from '@mui/material';
-import CardContent from '@mui/material/CardContent';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
+import { Avatar, Box, Card, CardContent, Typography } from '@mui/material';
 import { LocalDate } from '@runningdinner/shared';
 
-import { CardFlexibleHeight } from '../LandingStyles';
-import { NewsItem } from './NewsItemsHook';
-
-interface NewsCardItem extends Omit<NewsItem, 'content'> {
-  content: React.ReactNode;
+interface NewsCardProps {
+  title: string;
+  content: string;
+  date: Date;
 }
 
-export function NewsCard({ title, content, date }: NewsCardItem) {
+export function NewsCard({ title, content, date }: NewsCardProps) {
   return (
-    <CardFlexibleHeight>
-      <CardHeader
-        title={title}
-        sx={{ pb: 0 }}
-        avatar={
-          <Avatar sx={{ color: '#fff', backgroundColor: 'primary.main' }}>
-            <AssignmentIcon />
-          </Avatar>
+    <Card 
+      elevation={2}
+      sx={{ 
+        height: '100%',
+        transition: 'transform 0.2s, box-shadow 0.2s',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: 6,
         }
-        subheader={<LocalDate date={date} />}
-      />
-      <CardContent>
-        <div>{content}</div>
+      }}
+    >
+      <CardContent sx={{ p: 3 }}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
+          <Avatar 
+            sx={{ 
+              bgcolor: 'primary.main',
+              width: 48,
+              height: 48,
+              mr: 2,
+            }}
+          >
+            <NewspaperIcon />
+          </Avatar>
+          <Box sx={{ flex: 1 }}>
+            <Typography 
+              variant="h5" 
+              component="h2"
+              sx={{ 
+                fontWeight: 600,
+                mb: 0.5,
+                color: 'text.primary',
+              }}
+            >
+              {title}
+            </Typography>
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                color: 'text.secondary',
+                fontWeight: 500,
+              }}
+            >
+              <LocalDate date={date} />
+            </Typography>
+          </Box>
+        </Box>
+        <Typography 
+          variant="body1" 
+          sx={{ 
+            color: 'text.secondary',
+            lineHeight: 1.7,
+            mt: 2,
+          }}
+        >
+          {content}
+        </Typography>
       </CardContent>
-    </CardFlexibleHeight>
+    </Card>
   );
 }

@@ -1,6 +1,6 @@
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import React from 'react';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
 
 import { RUNNING_DINNER_EVENTS_PATH } from '../../common/mainnavigation/NavigationPaths';
 import Overview from './Overview';
