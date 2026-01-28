@@ -153,7 +153,7 @@ const NEWS_ITEMS = [
     title: 'Bugfix for problem during generating teams',
     content:
       'Unfortunately there was a technical error in the Running Dinner tool, which caused sometimes a problem during team generation. ' +
-      'This error is now fixed and furthermore some functions were slighty improved.',
+      'This error is now fixed and furthermore some functions were slightly improved.',
   },
   {
     date: '2020-02-05',
@@ -175,7 +175,7 @@ const NEWS_ITEMS = [
     content:
       'The web application supports now also English language. ' +
       'Thus it is now possible to view the running dinner platform also in English language. Furthermore it is now also possible to ' +
-      'create Running Rinner events in English language, which is especially useful in Non-German regions.',
+      'create Running Dinner events in English language, which is especially useful in Non-German regions.',
   },
   {
     date: '2019-06-20',
