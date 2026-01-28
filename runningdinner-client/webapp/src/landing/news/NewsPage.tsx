@@ -139,7 +139,7 @@ const newsItems: NewsItem[] = [
   },
   {
     title: 'Multiple languages',
-    content: 'The web application supports now also English language. Thus it is now possible to view the running dinner platform also in English language. Furthermore it is now also possible to create Running Rinner events in English language, which is especially useful in Non-German regions.',
+    content: 'The web application supports now also English language. Thus it is now possible to view the running dinner platform also in English language. Furthermore it is now also possible to create Running Dinner events in English language, which is especially useful in Non-German regions.',
     date: new Date(2019, 6, 1) // July 1, 2019
   },
   {
@@ -154,9 +154,9 @@ export function NewsPage() {
     <Box sx={{ mb: 3 }}>
       <PageTitle mt={4}>News</PageTitle>
       <Grid container direction={'column'} spacing={3}>
-        {newsItems.map((newsItem, index) => (
+        {newsItems.map((newsItem) => (
           <Grid
-            key={index}
+            key={newsItem.title}
             size={{
               xs: 12,
               lg: 10,
