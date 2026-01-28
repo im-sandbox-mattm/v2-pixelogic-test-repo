@@ -21,6 +21,7 @@ import { BackToListButton, useMasterDetailView } from '../../common/hooks/Master
 import { BrowserTitle } from '../../common/mainnavigation/BrowserTitle';
 import { useIsBigTabletDevice } from '../../common/theme/CustomMediaQueryHook';
 import { StickyActionButton } from '../../common/theme/StickyActionButton';
+import { useAdminNavigation } from '../AdminNavigationHook';
 import { EmptyDetails } from '../common/EmptyDetails';
 import ParticipantForm from './form/ParticipantForm';
 import { ParticipantSearchResult, ParticipantShowMiscNotesCallback, ParticipantsListHeader } from './list/ParticipantsListHeader';
@@ -28,7 +29,6 @@ import ParticipantsListInfo from './list/ParticipantsListInfo';
 import ParticipantsListView from './list/ParticipantsListView';
 import { CREATE_NEW_PARTICIPANT_TEAM_PARTNER_WISH_ACTION } from './teampartnerwish/TeamPartnerWishAction';
 import { TeamPartnerWishDialog } from './teampartnerwish/TeamPartnerWishDialog';
-import { useAdminNavigation } from '../AdminNavigationHook';
 
 export function ParticipantsPage({ runningDinner }: BaseRunningDinnerProps) {
   const params = useParams();

@@ -1,5 +1,5 @@
 import NewspaperIcon from '@mui/icons-material/Newspaper';
-import { Avatar, Card, CardContent, Typography, Box } from '@mui/material';
+import { Avatar, Box, Card, CardContent, Typography } from '@mui/material';
 import { LocalDate } from '@runningdinner/shared';
 
 interface NewsCardProps {

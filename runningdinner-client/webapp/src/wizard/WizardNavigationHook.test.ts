@@ -1,14 +1,13 @@
+import type { NavigationStep } from '@runningdinner/shared';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-
-import type { NavigationStep } from '@runningdinner/shared';
 
 import { WIZARD_ROOT_PATH } from '../common/mainnavigation/NavigationPaths';
 import useWizardNavigation from './WizardNavigationHook';
 
 const { navigateMock, getSearch } = vi.hoisted(() => {
   const navigateMock = vi.fn();
-  let search = '?demoDinner=true';
+  const search = '?demoDinner=true';
 
   return {
     navigateMock,
