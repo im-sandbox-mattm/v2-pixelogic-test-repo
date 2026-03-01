@@ -37,7 +37,7 @@ export default function LandingApp() {
     },
     {
       routePath: LANDING_NEWS_PATH,
-      title: t('common:news'),
+      title: 'News',
     },
     {
       routePath: RUNNING_DINNER_EVENTS_PATH,
